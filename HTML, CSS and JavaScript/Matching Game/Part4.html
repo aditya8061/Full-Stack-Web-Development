@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Matching Game</title>
+    <style>
+        img{position: absolute}
+        div{position: absolute; width:500px;height:500px;}
+        #rightSide { left: 500px; border-left: 1px solid black }
+    </style>
+</head>
+<body onload="generateFaces()">
+    <h1>Matching Game</h1>
+    <p>Click on the extra smiling face on the left.</p>
+    <div id="leftSide"></div>
+    <div id="rightSide"></div>
+    <script type="text/javascript">
+        var numberOfFaces = 5;
+        var theBody = document.getElementsByTagName("body")[0];        
+        var theLeftSide = document.getElementById("leftSide");
+        var theRightSide = document.getElementById("rightSide");
+        var counter = 0;        
+        function generateFaces() {
+            while (counter < numberOfFaces) {
+                var img = document.createElement("img");
+                img.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+                var randomTop = Math.floor(Math.random() * 400);
+                var randomLeft = Math.floor(Math.random() * 400);
+                img.style.top = randomTop + "px";
+                img.style.left = randomLeft + "px";
+                document.getElementById("leftSide").appendChild(img);
+                counter++;
+            }
+            var leftSideImages = theLeftSide.cloneNode(true);
+            lastChild = leftSideImages.lastChild;
+            theLeftSide.lastChild.onclick = function nextLevel(event) {
+			    resetAllNodes();
+                event.stopPropagation();
+                numberOfFaces += 5;
+				counter = 0;
+                generateFaces();
+            };
+            leftSideImages.removeChild(lastChild);
+            document.getElementById("rightSide").appendChild(leftSideImages);    
+        };
+        theBody.onclick = function gameOver() {
+            alert("Game Over!");
+            theBody.onclick = null;
+            theLeftSide.lastChild.onclick = null;
+        };       
+        function resetAllNodes()
+		{
+			while(theLeftSide.firstChild)
+				theLeftSide.removeChild(theLeftSide.firstChild);
+			while(theRightSide.firstChild)
+				theRightSide.removeChild(theRightSide.firstChild);
+		}
+    </script>
+</body>
+</html>
